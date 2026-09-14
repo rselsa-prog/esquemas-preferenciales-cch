@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Simulador de selección de asignaturas CCH</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .contenedor {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .instruccion {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+ .control-musica {
+    text-align: center;
+    margin: 15px 0 25px 0;
+}
+
+#botonMusica {
+    background: white;
+    border: 2px solid #666;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#botonMusica:hover {
+    background: #f2f2f2;
+}       
+
+.carrera {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+.selector-areas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 650px;
+    margin: 20px auto;
+    padding: 25px;
+    border-radius: 20px;
+
+    background:
+        radial-gradient(circle at top left, #bfe3ff 0%, transparent 45%),
+        radial-gradient(circle at top right, #c9f5bf 0%, transparent 45%),
+        radial-gradient(circle at bottom left, #ffe49b 0%, transparent 45%),
+        radial-gradient(circle at bottom right, #ddc4ff 0%, transparent 45%),
+        #f5f5f5;
+}
+
+.area-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 15px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.area-img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.20);
+}
+
+#botonVolverArea {
+    background: #2b6cb0;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 25px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#botonVolverArea:hover {
+    background: #1d4f8a;
+    transform: translateX(-3px);
+}
+
+        .carrera select {
+            font-size: 16px;
+            padding: 10px;
+            margin-left: 10px;
+            border-radius: 6px;
+        }
+
+        .bloque-esquema {
+            width: 100%;
+        }
+
+        .bloque-esquema h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .carrusel {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 10px;
+            border: 2px solid #333;
+            margin-bottom: 30px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .carrusel img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            flex-shrink: 0;
+            cursor: grab;
+        }
+
+.carrusel img.seleccionada {
+    outline: 4px solid #2b6cb0;
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+        .tarjeta {
+            min-width: 140px;
+            border: 1px solid #999;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: white;
+            text-align: center;
+        }
+
+        .zonas {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .zona {
+            width: 140px;
+            height: 140px;
+            border: 2px dashed #999;
+            border-radius: 8px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .zona img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        /* ---------- DISEÑO RESPONSIVO ---------- */
+
+        @media (max-width: 768px) {
+
+            .contenedor {
+                width: 95%;
+                padding: 20px;
+                margin: 10px auto;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .instruccion {
+                font-size: 16px;
+            }
+
+            .carrera {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 30px;
+            }
+
+            .carrera select {
+                margin-left: 0;
+                width: 100%;
+                max-width: 500px;
+            }
+
+            .bloque-esquema h2 {
+                font-size: 26px;
+            }
+
+            .carrusel img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .zonas {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .zona {
+                width: 120px;
+                height: 120px;
+            }
+
+            .zona img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .contenedor {
+                width: 100%;
+                padding: 15px;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .bloque-esquema h2 {
+                font-size: 23px;
+            }
+
+            .carrusel img {
+                width: 110px;
+                height: 110px;
+            }
+
+            .zona {
+                width: 110px;
+                height: 110px;
+            }
+
+            .zona img {
+                width: 110px;
+                height: 110px;
+            }
+
+.selector-areas {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+    margin: 15px auto;
+}
+
+.area-img {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+}
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<audio id="musicaFondo" loop>
+    <source src="sonidos/Industrious Ferret.mp3" type="audio/mpeg">
+</audio>
+
+    <div class="contenedor">
+
+        <h1>Conoce los esquemas preferenciales</h1>
+
+<div class="control-musica">
+    <button id="botonMusica">♫ Reproducir música</button>
+</div>
+
+     
+<div id="pantallaAreas">
+
+        <div class="carrera">
+
+<label for="area">
+   <strong>Selecciona el área de tu interés:</strong>
+
+</label>
+
+<div class="selector-areas">
+
+    <img src="imagenes/ÁREA1.png"
+         alt="Área I"
+         class="area-img"
+         data-area="1">
+
+    <img src="imagenes/ÁREA2.png"
+         alt="Área II"
+         class="area-img"
+         data-area="2">
+
+    <img src="imagenes/ÁREA3.png"
+         alt="Área III"
+         class="area-img"
+         data-area="3">
+
+    <img src="imagenes/ÁREA4.png"
+         alt="Área IV"
+         class="area-img"
+         data-area="4">
+
+</div>
+
+</div>
+
+</div>
+
+<div id="pantallaJuego" style="display: none;">
+
+<button id="botonVolverArea">← Cambiar de área</button>
+
+<p class="instruccion">
+
+    Arrastra una asignatura a Materia 1, 2 o 3; o tócala y después toca el recuadro donde quieras colocarla.
+</p>
+
+    <div class="carrera">
+
+            <label for="carrera">
+                <strong>Selecciona la carrera de tu interés:</strong>
+            </label>
+
+           <select id="carrera">
+
+    <option value="">-- Elige una carrera --</option>
+
+    <option value="101">Actuaría</option>
+    <option value="102">Arquitectura</option>
+    <option value="103">Arquitectura del Paisaje</option>
+    <option value="104">Ciencias de la Computación</option>
+    <option value="127">Ciencias de la Tierra</option>
+    <option value="133">Ciencia de Materiales Sustentables</option>
+    <option value="138">Ciencia de Datos</option>
+    <option value="105">Diseño Industrial</option>
+    <option value="106">Física</option>
+    <option value="134">Física Biomédica</option>
+    <option value="131">Geociencias</option>
+    <option value="139">Ingeniería Aeroespacial</option>
+    <option value="137">Ingeniería Ambiental</option>
+    <option value="107">Ingeniería Civil</option>
+    <option value="108">Ingeniería en Minas y Metalurgia</option>
+    <option value="109">Ingeniería Eléctrica Electrónica</option>
+    <option value="110">Ingeniería en Computación</option>
+    <option value="128">Ingeniería en Energías Renovables</option>
+    <option value="135">Ingeniería en Sistemas Biomédicos</option>
+    <option value="111">Ingeniería en Telecomunicaciones</option>
+    <option value="130">Ingeniería en Telecomunicaciones, Sistemas y Electrónica</option>
+    <option value="112">Ingeniería Geofísica</option>
+    <option value="113">Ingeniería Geológica</option>
+    <option value="125">Ingeniería Geomática</option>
+    <option value="114">Ingeniería Industrial</option>
+    <option value="115">Ingeniería Mecánica</option>
+    <option value="116">Ingeniería Mecánica Eléctrica</option>
+    <option value="124">Ingeniería Mecatrónica</option>
+    <option value="117">Ingeniería Petrolera</option>
+    <option value="118">Ingeniería Química</option>
+    <option value="119">Ingeniería Química Metalúrgica</option>
+    <option value="122">Matemáticas</option>
+    <option value="136">Matemáticas Aplicadas</option>
+    <option value="121">Matemáticas Aplicadas y Computación</option>
+    <option value="140">Matemáticas para el Desarrollo</option>
+    <option value="129">Nanotecnología</option>
+    <option value="126">Tecnología</option>
+    <option value="132">Tecnologías para la Información en Ciencias</option>
+    <option value="123">Urbanismo</option>
+
+    <option value="201">Biología</option>
+    <option value="218">Bioquímica Diagnóstica</option>
+    <option value="231">Ciencia de la Nutrición Humana</option>
+    <option value="224">Ciencia Forense</option>
+    <option value="230">Ciencias Agroforestales</option>
+    <option value="223">Ciencias Agrogenómicas</option>
+    <option value="216">Ciencias Ambientales</option>
+    <option value="215">Ciencias Genómicas</option>
+    <option value="202">Cirujano Dentista</option>
+    <option value="225">Ecología</option>
+    <option value="220">Enfermería</option>
+    <option value="203">Enfermería y Obstetricia</option>
+    <option value="219">Farmacia</option>
+    <option value="221">Fisioterapia</option>
+    <option value="204">Ingeniería Agrícola</option>
+    <option value="205">Ingeniería en Alimentos</option>
+    <option value="206">Investigación Biomédica Básica</option>
+    <option value="217">Manejo Sustentable de Zonas Costeras</option>
+    <option value="207">Medicina Veterinaria y Zootecnia</option>
+    <option value="208">Médico Cirujano</option>
+    <option value="226">Neurociencias</option>
+    <option value="227">Nutriología</option>
+    <option value="222">Odontología</option>
+    <option value="209">Optometría</option>
+    <option value="228">Órtesis y Prótesis</option>
+    <option value="210">Psicología</option>
+    <option value="211">Química</option>
+    <option value="212">Química de Alimentos</option>
+    <option value="229">Química e Ingeniería en Materiales</option>
+    <option value="213">Química Farmacéutico Biológica</option>
+    <option value="214">Química Industrial</option>
+
+    <option value="301">Administración</option>
+    <option value="314">Administración Agropecuaria</option>
+    <option value="319">Antropología</option>
+    <option value="302">Ciencias de la Comunicación</option>
+    <option value="303">Ciencias Políticas y Administración Pública</option>
+    <option value="315">Comunicación</option>
+    <option value="316">Comunicación y Periodismo</option>
+    <option value="304">Contaduría</option>
+    <option value="305">Derecho</option>
+    <option value="318">Desarrollo Comunitario para el Envejecimiento</option>
+    <option value="320">Desarrollo Territorial</option>
+    <option value="306">Economía</option>
+    <option value="313">Economía Industrial</option>
+    <option value="317">Estudios Sociales y Gestión Local</option>
+    <option value="307">Geografía</option>
+    <option value="322">Geografía Aplicada</option>
+    <option value="308">Informática</option>
+    <option value="321">Negocios Internacionales</option>
+    <option value="309">Planificación para el Desarrollo Agropecuario</option>
+    <option value="310">Relaciones Internacionales</option>
+    <option value="311">Sociología</option>
+    <option value="324">Sociología Aplicada</option>
+    <option value="312">Trabajo Social</option>
+    <option value="323">Turismo y Desarrollo Sostenible</option>
+
+    <option value="437">Administración de Archivos y Gestión Documental</option>
+    <option value="434">Arte y Diseño</option>
+    <option value="401">Artes Visuales</option>
+    <option value="402">Bibliotecología y Estudios de la Información</option>
+    <option value="435">Cinematografía</option>
+    <option value="429">Desarrollo y Gestión Interculturales</option>
+    <option value="406">Diseño Gráfico</option>
+    <option value="423">Diseño y Comunicación Visual</option>
+    <option value="424">Enseñanza de Alemán como Lengua Extranjera</option>
+    <option value="425">Enseñanza de Español como Lengua Extranjera</option>
+    <option value="426">Enseñanza de Francés como Lengua Extranjera</option>
+    <option value="408">Enseñanza del Inglés</option>
+    <option value="427">Enseñanza de Inglés como Lengua Extranjera</option>
+    <option value="428">Enseñanza de Italiano como Lengua Extranjera</option>
+    <option value="409">Estudios Latinoamericanos</option>
+    <option value="410">Etnomusicología</option>
+    <option value="411">Filosofía</option>
+    <option value="431">Geohistoria</option>
+    <option value="412">Historia</option>
+    <option value="433">Historia del Arte</option>
+    <option value="414">Lengua y Literaturas Hispánicas</option>
+    <option value="415">Lengua y Literaturas Modernas Alemanas</option>
+    <option value="416">Lengua y Literaturas Modernas Francesas</option>
+    <option value="417">Lengua y Literaturas Modernas Inglesas</option>
+    <option value="418">Lengua y Literaturas Modernas Italianas</option>
+    <option value="430">Lengua y Literaturas Modernas Portuguesas</option>
+    <option value="419">Letras Clásicas</option>
+    <option value="439">Lingüística Aplicada</option>
+    <option value="420">Literatura Dramática y Teatro</option>
+    <option value="432">Literatura Intercultural</option>
+    <option value="403">Música-Canto</option>
+    <option value="404">Música-Composición</option>
+    <option value="407">Música-Educación Musical</option>
+    <option value="413">Música-Instrumentista</option>
+    <option value="422">Música-Piano</option>
+    <option value="438">Música y Tecnología Artística</option>
+    <option value="421">Pedagogía</option>
+    <option value="436">Teatro y Actuación</option>
+    <option value="440">Traducción</option>
+
+</select>
+        </div>
+
+        <div class="bloque-esquema">
+
+            <h2>Esquema Preferencial</h2>
+
+            <div class="carrusel">
+
+                <img src="imagenes/CÁLCULO.png"
+                     alt="Cálculo Integral y Diferencial"
+                     draggable="true"
+                     id="calculo">
+
+                <img src="imagenes/ESTADÍSTICA.png"
+                     alt="Estadística y Probabilidad"
+                     draggable="true"
+                     id="estadistica">
+
+                <img src="imagenes/FÍSICA.png"
+                     alt="Física"
+                     draggable="true"
+                     id="fisica">
+
+                <img src="imagenes/DERECHO.png"
+                     alt="Derecho"
+                     draggable="true"
+                     id="derecho">
+
+                <img src="imagenes/CIENCIAS POLÍTICAS.png"
+                     alt="Ciencias Políticas y Sociales"
+                     draggable="true"
+                     id="ciencias_politicas">
+
+                <img src="imagenes/LATÍN.png"
+                     alt="Latín"
+                     draggable="true"
+                     id="latin">
+
+                <img src="imagenes/BIOLOGÍA.png"
+                     alt="Biología"
+                     draggable="true"
+                     id="biologia">
+
+                <img src="imagenes/QUÍMICA.png"
+                     alt="Química"
+                     draggable="true"
+                     id="quimica">
+
+<img src="imagenes/GEOGRAFÍA.png"
+     alt="Geografía"
+     draggable="true"
+     id="geografia">
+
+<img src="imagenes/TEORÍA DE LA HISTORIA.png"
+     alt="Teoría de la Historia"
+     draggable="true"
+     id="teoria_historia">
+
+<img src="imagenes/LECTURA Y ANÁLISIS DE TEXTOS LITERARIOS.png"
+     alt="Lectura y Análisis de Textos Literarios"
+     draggable="true"
+     id="lectura_textos">
+
+<img src="imagenes/TEMAS SELECTOS DE FILOSOFÍA.png"
+     alt="Temas Selectos de Filosofía"
+     draggable="true"
+     id="temas_filosofia">
+
+<img src="imagenes/PSICOLOGÍA.png"
+     alt="Psicología"
+     draggable="true"
+     id="psicologia">
+
+<img src="imagenes/TALLER DE COMUNICACIÓN.png"
+     alt="Taller de Comunicación"
+     draggable="true"
+     id="taller_comunicacion">
+
+<img src="imagenes/ADMINISTRACIÓN.png"
+     alt="Administración"
+     draggable="true"
+     id="administracion">
+
+<img src="imagenes/ANTROPOLOGÍA.png"
+     alt="Antropología"
+     draggable="true"
+     id="antropologia">
+
+<img src="imagenes/CIBERNÉTICA Y COMPUTACIÓN.png"
+     alt="Cibernética y Computación"
+     draggable="true"
+     id="cibernetica_computacion">
+
+<img src="imagenes/CIENCIAS DE LA SALUD.png"
+     alt="Ciencias de la Salud"
+     draggable="true"
+     id="ciencias_salud">
+
+<img src="imagenes/ECONOMÍA.png"
+     alt="Economía"
+     draggable="true"
+     id="economia">
+
+<img src="imagenes/GRIEGO.png"
+     alt="Griego"
+     draggable="true"
+     id="griego">
+
+<img src="imagenes/TALLER DE DISEÑO AMBIENTAL.png"
+     alt="Taller de Diseño Ambiental"
+     draggable="true"
+     id="taller_diseno_ambiental">
+
+<img src="imagenes/TALLER DE EXPRESIÓN GRÁFICA.png"
+     alt="Taller de Expresión Gráfica"
+     draggable="true"
+     id="taller_expresion_grafica">
+
+            </div>
+
+            <div class="zonas">
+
+               <div class="zona" id="espacio1">Materia 1</div>
+<div class="zona" id="espacio2">Materia 2</div>
+<div class="zona" id="espacio3">Materia 3</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+const musicaFondo = document.getElementById("musicaFondo");
+const botonMusica = document.getElementById("botonMusica");
+
+musicaFondo.volume = 0.20;
+
+botonMusica.addEventListener("click", function() {
+
+    if (musicaFondo.paused) {
+        musicaFondo.play();
+        botonMusica.textContent = "🔇 Silenciar música";
+    } else {
+        musicaFondo.pause();
+        botonMusica.textContent = "♫ Reproducir música";
+    }
+
+});
+
+        const carrera = document.getElementById("carrera");
+        const asignaturas = document.querySelectorAll(".carrusel img");
+        const espacios = document.querySelectorAll(".zona");
+        const carrusel = document.querySelector(".carrusel");
+
+let asignaturaSeleccionada = null;
+
+const pantallaAreas = document.getElementById("pantallaAreas");
+const pantallaJuego = document.getElementById("pantallaJuego");
+const botonesArea = document.querySelectorAll(".area-img");
+
+const botonVolverArea = document.getElementById("botonVolverArea");
+
+botonVolverArea.addEventListener("click", function() {
+
+    carrera.value = "";
+
+    espacios.forEach(function(espacio, indice) {
+
+        const asignatura = espacio.querySelector("img");
+
+        if (asignatura) {
+            carrusel.appendChild(asignatura);
+        }
+
+        espacio.textContent = "Materia " + (indice + 1);
+
+    });
+
+    pantallaJuego.style.display = "none";
+    pantallaAreas.style.display = "block";
+
+});
+
+botonesArea.forEach(function(boton) {
+
+    boton.addEventListener("click", function() {
+
+        const areaSeleccionada = boton.dataset.area;
+
+        const opciones = carrera.querySelectorAll("option");
+
+        opciones.forEach(function(opcion) {
+
+            if (opcion.value === "") {
+                opcion.style.display = "";
+                return;
+            }
+
+            if (opcion.value.startsWith(areaSeleccionada)) {
+                opcion.style.display = "";
+            } else {
+                opcion.style.display = "none";
+            }
+
+        });
+
+        carrera.value = "";
+
+        pantallaAreas.style.display = "none";
+        pantallaJuego.style.display = "block";
+
+    });
+
+});
+
+carrera.addEventListener("change", function() {
+
+    espacios.forEach(function(espacio, indice) {
+
+        const asignatura = espacio.querySelector("img");
+
+        if (asignatura) {
+            carrusel.appendChild(asignatura);
+        }
+
+        espacio.textContent = "Materia " + (indice + 1);
+
+    });
+
+    carrusel.scrollLeft = 0;
+
+});
+
+      const esquemasPreferenciales = {
+
+    // Área I
+    "101": ["calculo", "estadistica", "fisica"],
+    "102": ["calculo", "estadistica", "fisica"],
+    "103": ["calculo", "estadistica", "fisica"],
+    "104": ["calculo", "cibernetica_computacion", "fisica"],
+    "127": ["calculo", "fisica", "quimica"],
+    "133": ["calculo", "fisica", "quimica"],
+    "138": ["calculo", "estadistica", "fisica"],
+    "105": ["calculo", "cibernetica_computacion", "fisica"],
+    "106": ["calculo", "cibernetica_computacion", "fisica"],
+    "134": ["calculo", "fisica", "biologia"],
+    "131": ["calculo", "fisica", "quimica"],
+    "139": ["calculo", "fisica", "quimica"],
+    "137": ["calculo", "fisica", "quimica"],
+    "107": ["calculo", "fisica", "quimica"],
+    "108": ["calculo", "fisica", "quimica"],
+    "109": ["calculo", "cibernetica_computacion", "fisica"],
+    "110": ["calculo", "cibernetica_computacion", "fisica"],
+    "128": ["calculo", "fisica", "quimica"],
+    "135": ["calculo", "fisica", "quimica"],
+    "111": ["calculo", "cibernetica_computacion", "fisica"],
+    "130": ["calculo", "cibernetica_computacion", "fisica"],
+    "112": ["calculo", "fisica", "quimica"],
+    "113": ["calculo", "fisica", "quimica"],
+    "125": ["calculo", "cibernetica_computacion", "fisica"],
+    "114": ["calculo", "fisica", "quimica"],
+    "115": ["calculo", "fisica", "quimica"],
+    "116": ["calculo", "fisica", "quimica"],
+    "124": ["calculo", "cibernetica_computacion", "fisica"],
+    "117": ["calculo", "fisica", "quimica"],
+    "118": ["calculo", "fisica", "quimica"],
+    "119": ["calculo", "fisica", "quimica"],
+    "122": ["calculo", "estadistica", "fisica"],
+    "136": ["calculo", "estadistica", "fisica"],
+    "121": ["calculo", "cibernetica_computacion", "fisica"],
+    "140": ["calculo", "estadistica", "fisica"],
+    "129": ["calculo", "biologia", "quimica"],
+    "126": ["calculo", "cibernetica_computacion", "fisica"],
+    "132": ["calculo", "estadistica", "biologia"],
+    "123": ["calculo", "estadistica", "fisica"],
+
+    // Área II
+    "201": ["estadistica", "biologia", "quimica"],
+    "218": ["calculo", "biologia", "quimica"],
+    "231": ["estadistica", "biologia", "quimica"],
+    "224": ["estadistica", "biologia", "quimica"],
+    "230": ["estadistica", "biologia", "quimica"],
+    "223": ["calculo", "biologia", "quimica"],
+    "216": ["estadistica", "biologia", "quimica"],
+    "215": ["estadistica", "biologia", "quimica"],
+    "202": ["estadistica", "biologia", "quimica"],
+    "225": ["calculo", "biologia", "quimica"],
+    "220": ["estadistica", "biologia", "quimica"],
+    "203": ["estadistica", "biologia", "quimica"],
+    "219": ["calculo", "biologia", "quimica"],
+    "221": ["estadistica", "biologia", "quimica"],
+    "204": ["estadistica", "biologia", "quimica"],
+    "205": ["calculo", "biologia", "quimica"],
+    "206": ["estadistica", "biologia", "quimica"],
+    "217": ["estadistica", "biologia", "quimica"],
+    "207": ["estadistica", "biologia", "quimica"],
+    "208": ["estadistica", "biologia", "quimica"],
+    "226": ["calculo", "biologia", "quimica"],
+    "227": ["estadistica", "biologia", "quimica"],
+    "222": ["estadistica", "biologia", "quimica"],
+    "209": ["calculo", "biologia", "fisica"],
+    "228": ["calculo", "biologia", "fisica"],
+    "210": ["estadistica", "biologia", "quimica"],
+    "211": ["calculo", "fisica", "quimica"],
+    "212": ["calculo", "biologia", "quimica"],
+    "229": ["calculo", "fisica", "quimica"],
+    "213": ["calculo", "biologia", "quimica"],
+    "214": ["calculo", "fisica", "quimica"],
+
+    // Área III
+    "301": ["administracion", "derecho", "lectura_textos"],
+    "314": ["economia", "derecho", "taller_diseno_ambiental"],
+    "319": ["antropologia", "geografia", "taller_comunicacion"],
+    "302": ["antropologia", "ciencias_politicas", "taller_comunicacion"],
+    "303": ["teoria_historia", "ciencias_politicas", "taller_comunicacion"],
+    "315": ["economia", "ciencias_politicas", "taller_comunicacion"],
+    "316": ["ciencias_politicas", "lectura_textos", "taller_comunicacion"],
+    "304": ["derecho", "economia", "lectura_textos"],
+    "305": ["derecho", "ciencias_politicas", "latin"],
+    "318": ["antropologia", "ciencias_salud", "taller_diseno_ambiental"],
+    "320": ["ciencias_politicas", "economia", "taller_comunicacion"],
+    "306": ["teoria_historia", "economia", "taller_comunicacion"],
+    "313": ["ciencias_politicas", "economia", "taller_comunicacion"],
+    "317": ["antropologia", "ciencias_politicas", "lectura_textos"],
+    "307": ["geografia", "economia", "taller_diseno_ambiental"],
+    "322": ["geografia", "economia", "taller_diseno_ambiental"],
+    "308": ["administracion", "derecho", "taller_comunicacion"],
+    "321": ["administracion", "derecho", "taller_comunicacion"],
+    "309": ["geografia", "economia", "taller_comunicacion"],
+    "310": ["derecho", "ciencias_politicas", "latin"],
+    "311": ["antropologia", "ciencias_politicas", "taller_comunicacion"],
+    "324": ["antropologia", "ciencias_politicas", "lectura_textos"],
+    "312": ["derecho", "psicologia", "taller_comunicacion"],
+    "323": ["administracion", "geografia", "taller_comunicacion"],
+
+    // Área IV
+    "437": ["administracion", "teoria_historia", "taller_comunicacion"],
+    "434": ["psicologia", "taller_comunicacion", "taller_expresion_grafica"],
+    "401": ["psicologia", "taller_diseno_ambiental", "taller_expresion_grafica"],
+    "402": ["administracion", "griego", "latin"],
+    "435": ["ciencias_politicas", "lectura_textos", "taller_expresion_grafica"],
+    "429": ["teoria_historia", "antropologia", "lectura_textos"],
+    "406": ["psicologia", "taller_comunicacion", "taller_expresion_grafica"],
+    "423": ["psicologia", "taller_comunicacion", "taller_expresion_grafica"],
+    "424": ["psicologia", "latin", "lectura_textos"],
+    "425": ["psicologia", "latin", "lectura_textos"],
+    "426": ["psicologia", "latin", "lectura_textos"],
+    "408": ["psicologia", "latin", "lectura_textos"],
+    "427": ["psicologia", "latin", "lectura_textos"],
+    "428": ["psicologia", "latin", "lectura_textos"],
+    "409": ["teoria_historia", "antropologia", "lectura_textos"],
+    "410": ["geografia", "antropologia", "lectura_textos"],
+    "411": ["temas_filosofia", "teoria_historia", "griego"],
+    "431": ["ciencias_politicas", "geografia", "lectura_textos"],
+    "412": ["geografia", "teoria_historia", "lectura_textos"],
+    "433": ["geografia", "lectura_textos", "taller_expresion_grafica"],
+    "414": ["antropologia", "latin", "lectura_textos"],
+    "415": ["antropologia", "latin", "lectura_textos"],
+    "416": ["antropologia", "latin", "lectura_textos"],
+    "417": ["antropologia", "latin", "lectura_textos"],
+    "418": ["antropologia", "latin", "lectura_textos"],
+    "430": ["antropologia", "latin", "lectura_textos"],
+    "419": ["teoria_historia", "griego", "latin"],
+    "439": ["antropologia", "latin", "taller_comunicacion"],
+    "420": ["psicologia", "griego", "lectura_textos"],
+    "432": ["geografia", "lectura_textos", "taller_comunicacion"],
+    "403": ["antropologia", "lectura_textos", "taller_expresion_grafica"],
+    "404": ["temas_filosofia", "antropologia", "lectura_textos"],
+    "407": ["antropologia", "lectura_textos", "taller_expresion_grafica"],
+    "413": ["antropologia", "lectura_textos", "taller_expresion_grafica"],
+    "422": ["antropologia", "lectura_textos", "taller_expresion_grafica"],
+    "438": ["antropologia", "lectura_textos", "taller_comunicacion"],
+    "421": ["temas_filosofia", "psicologia", "taller_comunicacion"],
+    "436": ["psicologia", "lectura_textos", "taller_comunicacion"],
+    "440": ["antropologia", "griego", "lectura_textos"]
+
+};
+        function sonidoError() {
+
+            const audioCtx =
+                new (window.AudioContext || window.webkitAudioContext)();
+
+            const oscilador = audioCtx.createOscillator();
+            const volumen = audioCtx.createGain();
+
+            oscilador.connect(volumen);
+            volumen.connect(audioCtx.destination);
+
+            oscilador.frequency.value = 180;
+            volumen.gain.value = 0.15;
+
+            oscilador.start();
+            oscilador.stop(audioCtx.currentTime + 0.25);
+        }
+
+
+        function sonidoAcierto() {
+
+            const audioCtx =
+                new (window.AudioContext || window.webkitAudioContext)();
+
+            const notas = [660, 880];
+
+            notas.forEach(function(frecuencia, indice) {
+
+                const oscilador = audioCtx.createOscillator();
+                const volumen = audioCtx.createGain();
+
+                oscilador.connect(volumen);
+                volumen.connect(audioCtx.destination);
+
+                oscilador.frequency.value = frecuencia;
+                volumen.gain.value = 0.10;
+
+                const inicio =
+                    audioCtx.currentTime + (indice * 0.12);
+
+                oscilador.start(inicio);
+                oscilador.stop(inicio + 0.15);
+
+            });
+
+        }
+
+
+        asignaturas.forEach(function(asignatura) {
+
+            asignatura.addEventListener("mousedown", function() {
+
+                if (carrera.value === "") {
+
+                    alert(
+                        "Primero selecciona la carrera de tu interés."
+                    );
+
+                }
+
+            });
+
+asignatura.addEventListener("click", function() {
+
+    if (carrera.value === "") {
+        return;
+    }
+
+if (!asignatura.closest(".carrusel")) {
+    return;
+}
+
+   document.querySelectorAll(".carrusel img").forEach(function(img) {
+    img.classList.remove("seleccionada");
+});
+
+asignaturaSeleccionada = asignatura;
+asignatura.classList.add("seleccionada");
+
+});
+
+
+            asignatura.addEventListener("dragstart", function(event) {
+
+                if (carrera.value === "") {
+
+                    event.preventDefault();
+                    return;
+
+                }
+
+                event.dataTransfer.setData(
+                    "text/plain",
+                    asignatura.id
+                );
+
+            });
+
+        });
+
+
+        espacios.forEach(function(espacio) {
+
+espacio.addEventListener("click", function() {
+
+    if (!asignaturaSeleccionada) {
+        return;
+    }
+
+    const esquemaCarrera =
+        esquemasPreferenciales[carrera.value];
+
+    if (
+        !esquemaCarrera ||
+        !esquemaCarrera.includes(asignaturaSeleccionada.id)
+    ) {
+
+        sonidoError();
+
+        alert(
+            "¡Revisa tu elección!\n\n" +
+            "Esta asignatura no pertenece al esquema preferencial de la carrera que seleccionaste."
+        );
+
+        asignaturaSeleccionada = null;
+        return;
+    }
+
+    const asignaturaAnterior =
+        espacio.querySelector("img");
+
+    if (asignaturaAnterior) {
+        carrusel.appendChild(asignaturaAnterior);
+    }
+
+    espacio.textContent = "";
+    espacio.appendChild(asignaturaSeleccionada);
+
+    sonidoAcierto();
+
+    asignaturaSeleccionada = null;
+
+});
+
+            espacio.addEventListener("dragover", function(event) {
+
+                event.preventDefault();
+
+            });
+
+
+            espacio.addEventListener("drop", function(event) {
+
+                event.preventDefault();
+
+                const idAsignatura =
+                    event.dataTransfer.getData("text/plain");
+
+                const asignatura =
+                    document.getElementById(idAsignatura);
+
+                const esquemaCarrera =
+                    esquemasPreferenciales[carrera.value];
+
+
+              if (
+    !esquemaCarrera ||
+    !esquemaCarrera.includes(asignatura.id)
+) {
+
+                    carrusel.appendChild(asignatura);
+
+                    sonidoError();
+
+                    alert(
+                        "¡Revisa tu elección!\n\n" +
+                        "Esta asignatura no pertenece al esquema preferencial de la carrera que seleccionaste."
+                    );
+
+                    return;
+
+                }
+
+
+                const asignaturaAnterior =
+                    espacio.querySelector("img");
+
+
+                if (asignaturaAnterior) {
+
+                    carrusel.appendChild(asignaturaAnterior);
+
+                }
+
+
+                espacio.textContent = "";
+                espacio.appendChild(asignatura);
+
+                sonidoAcierto();
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>
