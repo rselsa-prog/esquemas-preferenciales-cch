@@ -654,6 +654,7 @@ botonMusica.addEventListener("click", function() {
 });
 
         const carrera = document.getElementById("carrera");
+const opcionesCarreraOriginales = carrera.innerHTML;
         const asignaturas = document.querySelectorAll(".carrusel img");
         const espacios = document.querySelectorAll(".zona");
         const carrusel = document.querySelector(".carrusel");
@@ -693,22 +694,20 @@ botonesArea.forEach(function(boton) {
 
         const areaSeleccionada = boton.dataset.area;
 
-        const opciones = carrera.querySelectorAll("option");
+       carrera.innerHTML = opcionesCarreraOriginales;
 
-        opciones.forEach(function(opcion) {
+const opciones = carrera.querySelectorAll("option");
 
-            if (opcion.value === "") {
-                opcion.style.display = "";
-                return;
-            }
+opciones.forEach(function(opcion) {
 
-            if (opcion.value.startsWith(areaSeleccionada)) {
-                opcion.style.display = "";
-            } else {
-                opcion.style.display = "none";
-            }
+    if (
+        opcion.value !== "" &&
+        !opcion.value.startsWith(areaSeleccionada)
+    ) {
+        opcion.remove();
+    }
 
-        });
+});
 
         carrera.value = "";
 
@@ -732,6 +731,17 @@ carrera.addEventListener("change", function() {
         espacio.textContent = "Materia " + (indice + 1);
 
     });
+
+const estampas = Array.from(carrusel.querySelectorAll("img"));
+
+for (let i = estampas.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [estampas[i], estampas[j]] = [estampas[j], estampas[i]];
+}
+
+estampas.forEach(function(estampa) {
+    carrusel.appendChild(estampa);
+});
 
     carrusel.scrollLeft = 0;
 
