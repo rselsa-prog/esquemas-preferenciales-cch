@@ -290,6 +290,87 @@
 }
         }
 
+/* Ventana de recompensa */
+
+.recompensa-fondo {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.recompensa-fondo.mostrar {
+    display: flex;
+}
+
+.recompensa-tarjeta {
+    background: white;
+    width: 90%;
+    max-width: 560px;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.30);
+    box-sizing: border-box;
+}
+
+.recompensa-tarjeta h2 {
+    font-size: 32px;
+    margin: 0 0 18px 0;
+}
+
+.recompensa-mensaje {
+    font-size: 22px;
+    line-height: 1.4;
+    font-weight: bold;
+    margin: 0 auto 20px;
+    max-width: 480px;
+}
+
+.recompensa-imagenes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 15px 0;
+}
+
+.recompensa-imagenes img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+}
+
+.recompensa-tarjeta h3 {
+    font-size: 24px;
+    margin: 15px 0 8px;
+}
+
+.recompensa-secundario {
+    font-size: 17px;
+    margin: 0 0 20px;
+}
+
+#botonContinuar {
+    background: #2b6cb0;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#botonContinuar:hover {
+    background: #1d4f8a;
+}
+
     </style>
 
 </head>
@@ -1091,11 +1172,57 @@ espacio.addEventListener("click", function() {
 
                 sonidoAcierto();
 
+// Comprobar si ya están ocupados los tres espacios
+const esquemaCompleto = Array.from(espacios).every(function(zona) {
+    return zona.querySelector("img");
+});
+
+if (esquemaCompleto) {
+    document.getElementById("recompensa").classList.add("mostrar");
+}
+
             });
 
         });
 
+
+
     </script>
+
+<!-- Recompensa por completar el esquema -->
+<div id="recompensa" class="recompensa-fondo">
+
+    <div class="recompensa-tarjeta">
+
+        <h2>¡Esquema completado!</h2>
+
+        <p class="recompensa-mensaje">
+            Son las tres materias que mejor te preparan para la carrera
+            que seleccionaste en el menú desplegable.
+        </p>
+
+        <div class="recompensa-imagenes">
+            <img src="imagenes/pumita.png" alt="Pumita CCH">
+            <img src="imagenes/insignia-cch.png" alt="Colegio de Ciencias y Humanidades">
+        </div>
+
+        <h3>¡Buen trabajo!</h3>
+
+        <p class="recompensa-secundario">
+            Sigue explorando otras carreras y combinaciones.
+        </p>
+
+        <button id="botonContinuar">Continuar</button>
+
+    </div>
+
+</div>
+
+<script>
+document.getElementById("botonContinuar").addEventListener("click", function() {
+    document.getElementById("recompensa").classList.remove("mostrar");
+});
+</script>
 
 </body>
 
