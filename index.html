@@ -1112,6 +1112,15 @@ espacio.addEventListener("click", function() {
 
     sonidoAcierto();
 
+// Comprobar si ya están ocupados los tres espacios
+const esquemaCompletoTactil = Array.from(espacios).every(function(zona) {
+    return zona.querySelector("img");
+});
+
+if (esquemaCompletoTactil) {
+    document.getElementById("recompensa").classList.add("mostrar");
+}
+
     asignaturaSeleccionada = null;
 
 });
