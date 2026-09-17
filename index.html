@@ -371,6 +371,22 @@
     background: #1d4f8a;
 }
 
+.creditos {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #666;
+}
+
+.creditos p {
+    margin: 0;
+}
+
+.creditos a {
+    color: #555;
+}
+
     </style>
 
 </head>
@@ -590,6 +606,10 @@
 
             <h2>Esquema Preferencial</h2>
 
+<p id="marcador">
+    Puntaje: <strong><span id="puntaje">0</span></strong>
+</p>
+
             <div class="carrusel">
 
                 <img src="imagenes/calculo.png"
@@ -711,6 +731,20 @@
 <div class="zona" id="espacio3">Materia 3</div>
             </div>
 
+<div class="creditos">
+    <p>
+
+<strong>Diseño y desarrollo de la actividad: Elsa Rodríguez Saldaña</strong><br><br>
+        Música: “Industrious Ferret” — Kevin MacLeod (incompetech.com).<br>
+        Licensed under Creative Commons: By Attribution 4.0 License.<br>
+        <a href="http://creativecommons.org/licenses/by/4.0/"
+           target="_blank"
+           rel="noopener">
+            Creative Commons Attribution 4.0
+        </a>
+    </p>
+</div>
+
         </div>
 
     </div>
@@ -741,6 +775,13 @@ const opcionesCarreraOriginales = carrera.innerHTML;
         const carrusel = document.querySelector(".carrusel");
 
 let asignaturaSeleccionada = null;
+
+let puntaje = 0;
+
+function actualizarPuntaje(cantidad) {
+    puntaje = puntaje + cantidad;
+    document.getElementById("puntaje").textContent = puntaje;
+}
 
 const pantallaAreas = document.getElementById("pantallaAreas");
 const pantallaJuego = document.getElementById("pantallaJuego");
@@ -1019,6 +1060,32 @@ estampas.forEach(function(estampa) {
 
         }
 
+function sonidoFanfarria() {
+
+    const audioCtx =
+        new (window.AudioContext || window.webkitAudioContext)();
+
+    const notas = [523, 659, 784, 1047];
+
+    notas.forEach(function(frecuencia, indice) {
+
+        const oscilador = audioCtx.createOscillator();
+        const volumen = audioCtx.createGain();
+
+        oscilador.connect(volumen);
+        volumen.connect(audioCtx.destination);
+
+        oscilador.frequency.value = frecuencia;
+        volumen.gain.value = 0.12;
+
+        const inicio =
+            audioCtx.currentTime + (indice * 0.16);
+
+        oscilador.start(inicio);
+        oscilador.stop(inicio + 0.22);
+    });
+}
+
 
         asignaturas.forEach(function(asignatura) {
 
@@ -1091,6 +1158,8 @@ espacio.addEventListener("click", function() {
 
         sonidoError();
 
+actualizarPuntaje(-5);
+
         alert(
             "¡Revisa tu elección!\n\n" +
             "Esta asignatura no pertenece al esquema preferencial de la carrera que seleccionaste."
@@ -1112,12 +1181,15 @@ espacio.addEventListener("click", function() {
 
     sonidoAcierto();
 
+actualizarPuntaje(10);
+
 // Comprobar si ya están ocupados los tres espacios
 const esquemaCompletoTactil = Array.from(espacios).every(function(zona) {
     return zona.querySelector("img");
 });
 
 if (esquemaCompletoTactil) {
+sonidoFanfarria();
     document.getElementById("recompensa").classList.add("mostrar");
 }
 
@@ -1155,6 +1227,9 @@ if (esquemaCompletoTactil) {
 
                     sonidoError();
 
+actualizarPuntaje(-5);
+
+
                     alert(
                         "¡Revisa tu elección!\n\n" +
                         "Esta asignatura no pertenece al esquema preferencial de la carrera que seleccionaste."
@@ -1180,6 +1255,7 @@ if (esquemaCompletoTactil) {
                 espacio.appendChild(asignatura);
 
                 sonidoAcierto();
+actualizarPuntaje(10);
 
 // Comprobar si ya están ocupados los tres espacios
 const esquemaCompleto = Array.from(espacios).every(function(zona) {
@@ -1187,6 +1263,7 @@ const esquemaCompleto = Array.from(espacios).every(function(zona) {
 });
 
 if (esquemaCompleto) {
+    sonidoFanfarria();
     document.getElementById("recompensa").classList.add("mostrar");
 }
 
@@ -1218,7 +1295,7 @@ if (esquemaCompleto) {
         <h3>¡Buen trabajo!</h3>
 
         <p class="recompensa-secundario">
-            Sigue explorando otras carreras y combinaciones.
+            Sigue explorando otras carreras y sus esquemas preferenciales.
         </p>
 
         <button id="botonContinuar">Continuar</button>
@@ -1228,8 +1305,30 @@ if (esquemaCompleto) {
 </div>
 
 <script>
+
+
 document.getElementById("botonContinuar").addEventListener("click", function() {
+
     document.getElementById("recompensa").classList.remove("mostrar");
+
+    espacios.forEach(function(espacio, indice) {
+
+        const asignatura = espacio.querySelector("img");
+
+        if (asignatura) {
+            carrusel.appendChild(asignatura);
+        }
+
+        espacio.textContent = "Materia " + (indice + 1);
+    });
+
+    carrera.value = "";
+
+    puntaje = 0;
+    document.getElementById("puntaje").textContent = puntaje;
+
+    asignaturaSeleccionada = null;
+
 });
 </script>
 
